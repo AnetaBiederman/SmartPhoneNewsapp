@@ -1,12 +1,16 @@
 package com.example.android.smartphonenewsapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,90 +20,93 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartPhoneNewsActivity extends AppCompatActivity {
-
-    /**
-     * Adapter for the list of news
-     */
-    private NewsAdapter mAdapter;
+public class SmartPhoneNewsActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<List<ItemNews>> {
 
     private static final String LOG_TAG = SmartPhoneNewsActivity.class.getName();
 
-    /**
-     * URL to query the USGS dataset for news information
-     */
-    private static final String USGS_REQUEST_URL =
-            "http://content.guardianapis.com/search?section=technology&q=smart%20phone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09";
+    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/search?order-by=relevance&q=smartphone&api-key=test";
+
+    private static final int NEWS_LOADER_ID = 1;
+
+    private TextView mEmptyStateTextView;
+
+    private ProgressBar mProgressBar;
+
+    private NewsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_phone_news);
-    }
-    /**
-     * Update the UI with the given earthquake information.
-     */
-    private void updateUi(List<ItemNews> news) {
 
-        // Find a reference to the {@link ListView} in the layout
         ListView newsListView = (ListView) findViewById(R.id.list);
 
-        // Create a new adapter that takes the list of news as input
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_state_view);
+        newsListView.setEmptyView(mEmptyStateTextView);
+
         mAdapter = new NewsAdapter(this, new ArrayList<ItemNews>());
 
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
         newsListView.setAdapter(mAdapter);
 
+        // Set an item click listener on the ListView, which sends an intent to a web browser
+        // to open a website with more information about the selected news.
         newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // Find the current earthquake that was clicked on
-                ItemNews currentNews = mAdapter.getItem(position);
 
-                // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri newsUri = Uri.parse(currentNews.getUrl());
-
-                // Create a new intent to view the earthquake URI
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-
-                // Send the intent to launch a new activity
+                ItemNews currentEarthquake = mAdapter.getItem(position);
+                Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
                 startActivity(websiteIntent);
             }
         });
 
-        // Start the AsyncTask to fetch the news data
-        NewsAsyncTask task = new NewsAsyncTask();
-        task.execute(USGS_REQUEST_URL);
+        // check if internet is available
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+        } else {
+            // Otherwise, display error
+            View loadingIndicator = findViewById(R.id.progress_bar);
+            loadingIndicator.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.no_internet);
+        }
     }
 
-    private class NewsAsyncTask extends AsyncTask<String, Void, List<ItemNews>> {
+    @Override
+    public Loader<List<ItemNews>> onCreateLoader(int i, Bundle bundle) {
+        // Create a new loader for the given URL
+        return new NewsLoader(this, USGS_REQUEST_URL);
+    }
 
-        /**
-         * This method runs on a background thread and performs the network request.
-         * We should not update the UI from a background thread, so we return a list of
-         * {@link ItemNews}s as the result.
-         */
-        @Override
-        protected List<ItemNews> doInBackground(String... urls) {
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
+    @Override
+    public void onLoadFinished(Loader<List<ItemNews>> loader, List<ItemNews> news) {
+        //Set visibility for progressBar
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.GONE);
 
-            List<ItemNews> results = QueryUtils.fetchNewsData(urls[0]);
-            return results;
+        // Set empty state text to display "No news found."
+        mEmptyStateTextView.setText(R.string.empty_state);
+
+        // Clear the adapter of previous news data
+        mAdapter.clear();
+
+        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+        // data set. This will trigger the ListView to update.
+        if (news != null && !news.isEmpty()) {
+            mAdapter.addAll(news);
         }
+    }
 
-        @Override
-        protected void onPostExecute(List<ItemNews> news) {
-            // Clear the adapter of previous news data
-            mAdapter.clear();
-
-            if (news != null && !news.isEmpty()) {
-                mAdapter.addAll(news);
-                updateUi(news);
-            }
-        }
+    @Override
+    public void onLoaderReset(Loader<List<ItemNews>> loader) {
+        // Loader reset, so we can clear out our existing data.
+        mAdapter.clear();
     }
 }
-

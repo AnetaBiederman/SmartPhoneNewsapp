@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartPhone News app</string>
+    <string name="empty_state">No news founds.</string>
+    <string name="no_internet">No internet found.</string>
 </resources>

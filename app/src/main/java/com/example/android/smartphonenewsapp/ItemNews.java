@@ -8,20 +8,28 @@ public class ItemNews {
 
     private String eDate;
 
+    private String eSection;
+
+    private String eTopic;
+
     /**
      * Create a new Item object.
      *
-     * @param url url of new
-     * @param title title of news
-     * @param date date of news
+     * @param url     url of new
+     * @param title   title of news
+     * @param date    date of news
+     * @param section of article (technology, travel)
+     * @param topic   of article (news, lifestyle)
      */
-    public ItemNews (String title, String date, String url) {
+    public ItemNews(String title, String date, String section, String topic, String url) {
         eUrl = url;
         eTitle = title;
         eDate = date;
+        eSection = section;
+        eTopic = topic;
     }
 
-    public String getdate() {
+    public String getDate() {
         return eDate;
     }
 
@@ -33,4 +41,11 @@ public class ItemNews {
         return eUrl;
     }
 
+    public String getSection() {
+        return eSection;
+    }
+
+    public String getTopic() {
+        return eTopic;
+    }
 }

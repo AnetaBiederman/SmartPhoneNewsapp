@@ -43,7 +43,9 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
 
         //Get the object's properties
         String newsTitle = currentNews.getTitle();
-        String date = currentNews.getdate();
+        String newsDate = currentNews.getDate();
+        String newSection = currentNews.getSection();
+        String newTopic = currentNews.getTopic();
 
         // Find the TextView with view ID title
         TextView titleTextView = (TextView) listItemView.findViewById(R.id.title_text_view);
@@ -51,7 +53,15 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
 
         // Find the TextView with view ID date
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
-        dateTextView.setText(date);
+        dateTextView.setText(newsDate);
+
+        // Find the TextView with view ID date
+        TextView sectionTextView = (TextView) listItemView.findViewById(R.id.article_section);
+        sectionTextView.setText(newSection);
+
+        // Find the TextView with view ID date
+        TextView topicTextView = (TextView) listItemView.findViewById(R.id.article_topic);
+        topicTextView.setText(newTopic);
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;

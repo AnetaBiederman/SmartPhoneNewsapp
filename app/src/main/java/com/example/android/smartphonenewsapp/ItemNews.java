@@ -10,7 +10,7 @@ public class ItemNews {
 
     private String eSection;
 
-    private String eTopic;
+    private String eAuthor;
 
     /**
      * Create a new Item object.
@@ -19,14 +19,14 @@ public class ItemNews {
      * @param title   title of news
      * @param date    date of news
      * @param section of article (technology, travel)
-     * @param topic   of article (news, lifestyle)
+     * @param author   of article (name)
      */
-    public ItemNews(String title, String date, String section, String topic, String url) {
+    public ItemNews(String title, String date, String section, String author, String url) {
         eUrl = url;
         eTitle = title;
         eDate = date;
         eSection = section;
-        eTopic = topic;
+        eAuthor = author;
     }
 
     public String getDate() {
@@ -45,7 +45,7 @@ public class ItemNews {
         return eSection;
     }
 
-    public String getTopic() {
-        return eTopic;
+    public String getAuthor() {
+        return eAuthor;
     }
 }

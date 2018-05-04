@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/item_list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="@dimen/padding">
 
         <TextView
             android:id="@+id/title_text_view"
@@ -12,15 +14,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:textColor="@android:color/black"
-            android:textSize="16dp"
-            tools:text="Title" />
+            android:textSize="@dimen/title_text_size"
+            tools:text="@string/title" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_text_view"
-            tools:text="Mar 6, 2010" />
+            tools:text="@string/date" />
 
         <TextView
             android:id="@+id/article_section"
@@ -28,15 +30,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title_text_view"
             android:layout_alignParentRight="true"
-            tools:text="Technology" />
+            tools:text="@string/technology" />
 
         <TextView
-            android:id="@+id/article_topic"
+            android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/article_section"
-            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/title_text_view"
+            android:layout_below="@+id/date"
             android:layout_gravity="right"
-            tools:text="News" />
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="@string/author" />
 
 </RelativeLayout>

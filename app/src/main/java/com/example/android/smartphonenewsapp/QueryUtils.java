@@ -1,6 +1,5 @@
 package com.example.android.smartphonenewsapp;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -20,7 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -162,12 +160,21 @@ public final class QueryUtils {
                 date = formatDate(date);
                 // section of article
                 String section = currentNews.getString("sectionName");
-                // topic of article
-                String topic = currentNews.getString("pillarName");
                 // website of article
                 String url = currentNews.getString("webUrl");
+                // author of article from tags
+                JSONArray tagsArray = currentNews.getJSONArray("tags");
+                String author = "";
+                if (tagsArray.length() == 0) {
+                    author = null;
+                } else {
+                    for (int j = 0; j < tagsArray.length(); j++) {
+                        JSONObject firstObject = tagsArray.getJSONObject(j);
+                        author = firstObject.getString("webTitle");
+                    }
+                }
 
-                ItemNews smartPhoneNews = new ItemNews(title, date, section, topic, url);
+                ItemNews smartPhoneNews = new ItemNews(title, date, section, author, url);
 
                 news.add(smartPhoneNews);
             }

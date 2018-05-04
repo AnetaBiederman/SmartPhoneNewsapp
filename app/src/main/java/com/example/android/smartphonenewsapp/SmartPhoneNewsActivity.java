@@ -3,7 +3,6 @@ package com.example.android.smartphonenewsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,7 +24,7 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
 
     private static final String LOG_TAG = SmartPhoneNewsActivity.class.getName();
 
-    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/search?order-by=relevance&q=smartphone&api-key=test";
+    private static final String USGS_REQUEST_URL = "http://content.guardianapis.com/search?page-size=50&show-tags=contributor&q=smartphone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09";
 
     private static final int NEWS_LOADER_ID = 1;
 

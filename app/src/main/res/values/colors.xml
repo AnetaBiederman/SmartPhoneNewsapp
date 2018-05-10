@@ -5,6 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 
     //section colors
-    <color name="technology">#80cbc4</color>
+    <color name="news">#b71c1c</color>
+    <color name="opinion">#ff5722</color>
+    <color name="sport">#03a9f4</color>
+    <color name="culture">#ff9800</color>
+    <color name="lifestyle">#e91e63</color>
+    <color name="more">#111111</color>
 
 </resources>

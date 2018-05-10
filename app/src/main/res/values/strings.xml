@@ -6,4 +6,54 @@
     <string name="technology">Technology</string>
     <string name="date">Mar 6, 2010</string>
     <string name="title">Title</string>
+
+    //Setting menu
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
+
+    //Choose date
+    <string name="settings_news_from_label">News from</string>
+    <string name="settings_news_from_key" translatable="false">from-date</string>
+    <string name="settings_news_from_default" translatable="false"></string>
+
+    //Choose section
+    <string-array name="settings_choose_section_labels">
+        <item>@string/settings_section_all_sections_news_label</item>
+        <item>@string/settings_section_technology_news_label</item>
+        <item>@string/settings_section_opinion_news_label</item>
+        <item>@string/settings_section_money_news_label</item>
+        <item>@string/settings_section_games_news_label</item>
+        <item>@string/settings_section_lifestyle_news_label</item>
+        <item>@string/settings_section_travel_news_label</item>
+    </string-array>
+    <string-array name="settings_choose_section_values">
+        <item>@string/settings_section_all_sections_news_value</item>
+        <item>@string/settings_section_technology_news_value</item>
+        <item>@string/settings_section_opinion_news_value</item>
+        <item>@string/settings_section_money_news_value</item>
+        <item>@string/settings_section_games_news_value</item>
+        <item>@string/settings_section_lifestyle_news_value</item>
+        <item>@string/settings_section_travel_news_value</item>
+    </string-array>
+    <string name="settings_choose_section_label">Choose section</string>
+    <string name="settings_choose_section_key" translatable="false">section</string>
+    <string name="settings_choose_section_default" translatable="false">@string/settings_section_all_sections_news_value</string>
+    //Sections name
+    <string name="settings_section_all_sections_news_label">All sections</string>
+    <string name="settings_section_all_sections_news_value" translatable="false">all_sections</string>
+    <string name="settings_section_technology_news_label">Technology</string>
+    <string name="settings_section_technology_news_value" translatable="false">technology</string>
+    <string name="settings_section_opinion_news_label">Opinion</string>
+    <string name="settings_section_opinion_news_value" translatable="false">commentisfree</string>
+    <string name="settings_section_money_news_label">Money</string>
+    <string name="settings_section_money_news_value" translatable="false">money</string>
+    <string name="settings_section_games_news_label">Games</string>
+    <string name="settings_section_games_news_value" translatable="false">games</string>
+    <string name="settings_section_lifestyle_news_label">Lifestyle</string>
+    <string name="settings_section_lifestyle_news_value" translatable="false">lifeandstyle</string>
+    <string name="settings_section_travel_news_label">Travel</string>
+    <string name="settings_section_travel_news_value" translatable="false">travel</string>
+    <string name="setting_older_date">Wrong input - no data for today</string>
+    <string name="setting_future_date">Wrong input - future date.</string>
+
 </resources>

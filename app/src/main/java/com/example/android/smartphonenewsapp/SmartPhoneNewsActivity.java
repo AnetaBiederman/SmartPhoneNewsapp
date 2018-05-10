@@ -4,19 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class SmartPhoneNewsActivity extends AppCompatActivity
@@ -24,8 +32,8 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
 
     private static final String LOG_TAG = SmartPhoneNewsActivity.class.getName();
 
-    private static final String USGS_REQUEST_URL = "http://content.guardianapis.com/search?page-size=50&show-tags=contributor&q=smartphone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09";
-
+    private static final String USGS_REQUEST_URL =
+            "https://content.guardianapis.com/search";
     private static final int NEWS_LOADER_ID = 1;
 
     private TextView mEmptyStateTextView;
@@ -54,9 +62,9 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                ItemNews currentEarthquake = mAdapter.getItem(position);
-                Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                ItemNews currentNews = mAdapter.getItem(position);
+                Uri newsUri = Uri.parse(currentNews.getUrl());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, newsUri);
                 startActivity(websiteIntent);
             }
         });
@@ -80,8 +88,44 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
 
     @Override
     public Loader<List<ItemNews>> onCreateLoader(int i, Bundle bundle) {
-        // Create a new loader for the given URL
-        return new NewsLoader(this, USGS_REQUEST_URL);
+
+        long longFromDate = 0;
+        String newsFrom = "";
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String section = sharedPreferences.getString(getString(R.string.settings_choose_section_key), getString(R.string.settings_choose_section_default));
+
+        longFromDate = sharedPreferences.getLong(
+                getString(R.string.settings_news_from_key), 0);
+
+        Date dateObject = new Date(longFromDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateObject);
+        newsFrom = dateFormat.format(calendar.getTime());
+
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+
+        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append query parameter and its value
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("show-fields", "thumbnail");
+        uriBuilder.appendQueryParameter("page-size", "50");
+        uriBuilder.appendQueryParameter("from-date", newsFrom);
+        uriBuilder.appendQueryParameter("q", "smartphone");
+        uriBuilder.appendQueryParameter("api-key", "4f6d3d44-39b3-406a-95de-feb62fb2fd09");
+
+        if (!section.equals(getString(R.string.settings_choose_section_default))) {
+            uriBuilder.appendQueryParameter("section", section);
+        }
+
+        // Return the completed uri 'https://content.guardianapis.com/search?show-tags=contributor&show-fields=thumbnail&page-size=50&q=smartphone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09'.
+        return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -96,7 +140,7 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
         // Clear the adapter of previous news data
         mAdapter.clear();
 
-        // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+        // If there is a valid list of {@link News}, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (news != null && !news.isEmpty()) {
             mAdapter.addAll(news);
@@ -107,5 +151,24 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
     public void onLoaderReset(Loader<List<ItemNews>> loader) {
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
+    }
+
+    @Override
+    // This method initialize the contents of the Activity's options menu.
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options Menu we specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

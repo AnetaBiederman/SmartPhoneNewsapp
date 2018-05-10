@@ -1,6 +1,7 @@
 package com.example.android.smartphonenewsapp;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,12 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         // Find the TextView with view ID title
         TextView titleTextView = (TextView) listItemView.findViewById(R.id.title_text_view);
         titleTextView.setText(newsTitle);
+        // Fetch the text color from the TextView.
+        titleTextView.getTextColors();
+        // Get the appropriate text color based on the current section of title
+        int colorOfText = getTextColor(currentNews.getPillarName());
+        // Set the color on the magnitude circle
+        titleTextView.setTextColor(colorOfText);
 
         // Find the TextView with view ID date
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
@@ -61,4 +68,34 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         // Return the list item view that is now showing the appropriate data
         return listItemView;
     }
+
+    /**
+     * Return the color for the text based on the section of the news.
+     *
+     * @param section of the news
+     */
+    private int getTextColor(String section) {
+        int newsColorResourceId;
+        switch (section) {
+            case "News":
+                newsColorResourceId = R.color.news;
+                break;
+            case "Opinion":
+                newsColorResourceId = R.color.opinion;
+                break;
+            case "Sport":
+                newsColorResourceId = R.color.sport;
+                break;
+            case "Culture":
+                newsColorResourceId = R.color.culture;
+                break;
+            case "Lifestyle":
+                newsColorResourceId = R.color.lifestyle;
+                break;
+            default:
+                newsColorResourceId = R.color.more;
+                break;
+        }
+        return ContextCompat.getColor(getContext(), newsColorResourceId);
+}
 }

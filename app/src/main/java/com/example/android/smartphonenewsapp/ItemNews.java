@@ -1,5 +1,7 @@
 package com.example.android.smartphonenewsapp;
 
+import android.graphics.Bitmap;
+
 public class ItemNews {
 
     private String eUrl;
@@ -12,21 +14,25 @@ public class ItemNews {
 
     private String eAuthor;
 
+    private String ePillarName;
+
     /**
      * Create a new Item object.
      *
-     * @param url     url of new
-     * @param title   title of news
-     * @param date    date of news
-     * @param section of article (technology, travel)
-     * @param author   of article (name)
+     * @param url        url of new
+     * @param title      title of news
+     * @param date       date of news
+     * @param section    of article (technology, travel)
+     * @param author     of article (name)
+     * @param pillarName of main section
      */
-    public ItemNews(String title, String date, String section, String author, String url) {
+    public ItemNews(String title, String date, String section, String author, String url, String pillarName) {
         eUrl = url;
         eTitle = title;
         eDate = date;
         eSection = section;
         eAuthor = author;
+        ePillarName = pillarName;
     }
 
     public String getDate() {
@@ -48,4 +54,9 @@ public class ItemNews {
     public String getAuthor() {
         return eAuthor;
     }
+
+    public String getPillarName() {
+        return ePillarName;
+    }
+
 }

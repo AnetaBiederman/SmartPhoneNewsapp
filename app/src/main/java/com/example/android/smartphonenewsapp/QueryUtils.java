@@ -42,10 +42,9 @@ public final class QueryUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        // Extract relevant fields from the JSON response and create a list of news
         List<ItemNews> news = extractFeatureFromJson(jsonResponse);
 
-        // Return the list of {@link Earthquake}s
         return news;
     }
 
@@ -105,7 +104,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the news JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -160,6 +159,8 @@ public final class QueryUtils {
                 date = formatDate(date);
                 // section of article
                 String section = currentNews.getString("sectionName");
+                // main section of article
+                String pillarName = currentNews.getString("pillarName");
                 // website of article
                 String url = currentNews.getString("webUrl");
                 // author of article from tags
@@ -173,8 +174,7 @@ public final class QueryUtils {
                         author = firstObject.getString("webTitle");
                     }
                 }
-
-                ItemNews smartPhoneNews = new ItemNews(title, date, section, author, url);
+                ItemNews smartPhoneNews = new ItemNews( title, date, section, author, url, pillarName);
 
                 news.add(smartPhoneNews);
             }
@@ -183,7 +183,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the news JSON results", e);
         }
 
         return news;

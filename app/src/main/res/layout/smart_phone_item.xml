@@ -40,6 +40,13 @@
             android:layout_below="@id/title_text_view"
             android:layout_alignParentRight="true"
             tools:text="@string/technology" />
+        <TextView
+            android:id="@+id/article_pillar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_section"
+            android:layout_alignParentRight="true"
+            tools:text="@string/news" />
 
         <TextView
             android:id="@+id/author"

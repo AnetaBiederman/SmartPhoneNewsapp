@@ -41,6 +41,7 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         String newsTitle = currentNews.getTitle();
         String newsDate = currentNews.getDate();
         String newsSection = currentNews.getSection();
+        String newsPillar = currentNews.getPillarName();
         String newsAuthor = currentNews.getAuthor();
 
         // Find the TextView with view ID title
@@ -57,11 +58,15 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
         dateTextView.setText(newsDate);
 
-        // Find the TextView with view ID date
+        // Find the TextView with view ID article_section
         TextView sectionTextView = (TextView) listItemView.findViewById(R.id.article_section);
         sectionTextView.setText(newsSection);
 
         // Find the TextView with view ID date
+        TextView pillarTextView = (TextView) listItemView.findViewById(R.id.article_pillar);
+        pillarTextView.setText(newsPillar);
+
+        // Find the TextView with view ID author
         TextView authorTextView = (TextView) listItemView.findViewById(R.id.author);
         authorTextView.setText(newsAuthor);
 

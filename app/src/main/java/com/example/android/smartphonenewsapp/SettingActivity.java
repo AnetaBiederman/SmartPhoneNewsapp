@@ -18,11 +18,14 @@ import java.util.Date;
 
 public class SettingActivity extends AppCompatActivity {
 
+    public static final String LOG_TAG = SettingActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_activity);
     }
+
     public static class NewsPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceChangeListener, DatePickerDialog.OnDateSetListener {
 
@@ -33,6 +36,7 @@ public class SettingActivity extends AppCompatActivity {
         private int mCurrentDayOfMonth;
         private String mToday;
         private String mYesterday;
+        private String mMonthAgo;
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -47,6 +51,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
             Preference fromDatePref = findPreference(getString(R.string.settings_news_from_key));
+            Preference toDatePref = findPreference(getString(R.string.settings_news_to_key));
 
             // Get today's Date
             mCalendar = Calendar.getInstance();
@@ -59,21 +64,37 @@ public class SettingActivity extends AppCompatActivity {
             mCalendar.add(Calendar.DATE, -1);
             mYesterday = dateFormat.format(mCalendar.getTime());
 
-            // Always set default date to Yesterday's date when app is launched
-            if (preferences.getLong(getString(R.string.settings_news_from_key), 0) == 0) {
-                fromDatePref.setSummary(mYesterday);
-            } else {
-                long longPrefDate = preferences.getLong(
-                        getString(R.string.settings_news_from_key), 0
-                );
+            // Get -30 days ago date
+            mCalendar.add(Calendar.DATE, -30);
+            mMonthAgo = dateFormat.format(mCalendar.getTime());
 
-                Date dateObject = new Date(longPrefDate);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(dateObject);
-                fromDatePref.setSummary(dateFormat.format(calendar.getTime()));
+            // Always set default From date to 30 days date when app is launched
+            if (preferences.getString(getString(R.string.settings_news_from_key), "0")
+                    .equalsIgnoreCase("0")) {
+                fromDatePref.setSummary(mMonthAgo);
+            } else {
+                String longPrefDate = preferences.getString(
+                        getString(R.string.settings_news_from_key), "0");
+                Date dateObject = new Date(Long.parseLong(longPrefDate));
+                Calendar calendarFrom = Calendar.getInstance();
+                calendarFrom.setTime(dateObject);
+                fromDatePref.setSummary(dateFormat.format(calendarFrom.getTime()));
+            }
+            // Always set default To date to Yesterday's date when app is launched
+            if (preferences.getString(getString(R.string.settings_news_to_key), "0")
+                    .equalsIgnoreCase("0")) {
+                toDatePref.setSummary(mYesterday);
+            } else {
+                String longPrefDate = preferences.getString(
+                        getString(R.string.settings_news_to_key), "0");
+                Date dateObject = new Date(Long.parseLong(longPrefDate));
+                Calendar calendarTo = Calendar.getInstance();
+                calendarTo.setTime(dateObject);
+                toDatePref.setSummary(dateFormat.format(calendarTo.getTime()));
             }
 
-            /** Set date picked from calendar as preferred date */
+
+            /** Set date picked from calendar as preferred date from*/
             fromDatePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(final Preference preference) {
@@ -94,15 +115,12 @@ public class SettingActivity extends AppCompatActivity {
 
                             datePickedFormatted = dateFormat.format(mCalendar.getTime());
 
-                            if (datePickedFormatted.compareTo(mToday) < 0) {
-                                Toast.makeText(getActivity(), getString(R.string.setting_older_date), Toast.LENGTH_LONG).show();
-                            } else if (datePickedFormatted.compareTo(mToday) > 0) {
+                            if (datePickedFormatted.compareTo(mToday) > 0) {
                                 Toast.makeText(getActivity(), getString(R.string.setting_future_date), Toast.LENGTH_LONG).show();
                             }
 
                             preference.setSummary(datePickedFormatted);
-                            preferences.edit().putLong(getString(R.string.settings_news_from_key), datePicked.getTime()).commit();
-
+                            preferences.edit().putString(getString(R.string.settings_news_from_key), String.valueOf(datePicked.getTime())).commit();
                         }
                     }, mCurrentYear, mCurrentMonth, mCurrentDayOfMonth);
 
@@ -110,6 +128,42 @@ public class SettingActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            /** Set date picked from calendar as preferred date to*/
+            toDatePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(final Preference preference) {
+
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+
+                            String datePickedFormatted = "";
+
+                            // Set picked date on calendar; if launching for first time then it's set to today's date
+                            mCalendar = Calendar.getInstance();
+                            mCalendar.set(Calendar.YEAR, year);
+                            mCalendar.set(Calendar.MONTH, monthOfYear);
+                            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            Date datePicked = mCalendar.getTime();
+
+                            datePickedFormatted = dateFormat.format(mCalendar.getTime());
+
+                            if (datePickedFormatted.compareTo(mToday) > 0) {
+                                Toast.makeText(getActivity(), getString(R.string.setting_future_date), Toast.LENGTH_LONG).show();
+                            }
+
+                            preference.setSummary(datePickedFormatted);
+                            preferences.edit().putString(getString(R.string.settings_news_to_key), String.valueOf(datePicked.getTime())).commit();
+                        }
+                    }, mCurrentYear, mCurrentMonth, mCurrentDayOfMonth);
+
+                    datePickerDialog.show();
+                    return true;
+                }
+            });
+
         }
 
         @Override
@@ -138,7 +192,7 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            // Default method overriden from parent class
+            // Default method overridden from parent class
         }
 
     }

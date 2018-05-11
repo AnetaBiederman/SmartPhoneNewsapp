@@ -90,7 +90,9 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
     public Loader<List<ItemNews>> onCreateLoader(int i, Bundle bundle) {
 
         long longFromDate = 0;
+        long longToDate = 0;
         String newsFrom = "";
+        String newsTo = "";
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -98,13 +100,20 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
 
         String section = sharedPreferences.getString(getString(R.string.settings_choose_section_key), getString(R.string.settings_choose_section_default));
 
-        longFromDate = sharedPreferences.getLong(
-                getString(R.string.settings_news_from_key), 0);
+        longFromDate = Long.parseLong(sharedPreferences.getString(
+                getString(R.string.settings_news_from_key), "0"));
+        longToDate = Long.parseLong(sharedPreferences.getString(
+                getString(R.string.settings_news_to_key), "0"));
 
-        Date dateObject = new Date(longFromDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateObject);
-        newsFrom = dateFormat.format(calendar.getTime());
+        Date dateObjectFrom = new Date(longFromDate);
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(dateObjectFrom);
+        newsFrom = dateFormat.format(calendarFrom.getTime());
+
+        Date dateObjectTo = new Date(longToDate);
+        Calendar calendarTo = Calendar.getInstance();
+        calendarTo.setTime(dateObjectTo);
+        newsTo = dateFormat.format(calendarTo.getTime());
 
         // parse breaks apart the URI string that's passed into its parameter
         Uri baseUri = Uri.parse(USGS_REQUEST_URL);
@@ -117,6 +126,7 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
         uriBuilder.appendQueryParameter("show-fields", "thumbnail");
         uriBuilder.appendQueryParameter("page-size", "50");
         uriBuilder.appendQueryParameter("from-date", newsFrom);
+        uriBuilder.appendQueryParameter("to-date", newsTo);
         uriBuilder.appendQueryParameter("q", "smartphone");
         uriBuilder.appendQueryParameter("api-key", "4f6d3d44-39b3-406a-95de-feb62fb2fd09");
 

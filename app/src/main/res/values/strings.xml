@@ -11,10 +11,15 @@
     <string name="settings_menu_item">Settings</string>
     <string name="settings_title">News Settings</string>
 
-    //Choose date
+    //Choose date from
     <string name="settings_news_from_label">News from</string>
     <string name="settings_news_from_key" translatable="false">from-date</string>
-    <string name="settings_news_from_default" translatable="false"></string>
+    <string name="settings_news_from_default" translatable="false">0</string>
+
+    //Choose date to
+    <string name="settings_news_to_label">News to</string>
+    <string name="settings_news_to_key" translatable="false">to-date</string>
+    <string name="settings_news_to_default" translatable="false">0</string>
 
     //Choose section
     <string-array name="settings_choose_section_labels">
@@ -55,5 +60,6 @@
     <string name="settings_section_travel_news_value" translatable="false">travel</string>
     <string name="setting_older_date">Wrong input - no data for today</string>
     <string name="setting_future_date">Wrong input - future date.</string>
+    <string name="news">News</string>
 
 </resources>

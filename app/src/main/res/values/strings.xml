@@ -21,6 +21,32 @@
     <string name="settings_news_to_key" translatable="false">to-date</string>
     <string name="settings_news_to_default" translatable="false">0</string>
 
+    // Choose order by
+    <string-array name="settings_order_by_labels">
+        <item>@string/settings_order_by_newest_news_label</item>
+        <item>@string/settings_order_by_oldest_news_label</item>
+        <item>@string/settings_order_by_relevance_news_label</item>
+    </string-array>
+
+    <string-array name="settings_order_by_values">
+        <item>@string/settings_order_by_newest_news_value</item>
+        <item>@string/settings_order_by_oldest_news_value</item>
+        <item>@string/settings_order_by_relevance_news_value</item>
+    </string-array>
+
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_newest_news_value</string>
+
+    <string name="settings_order_by_newest_news_label">Newest</string>
+    <string name="settings_order_by_newest_news_value" translatable="false">newest</string>
+
+    <string name="settings_order_by_oldest_news_label">Oldest</string>
+    <string name="settings_order_by_oldest_news_value" translatable="false">oldest</string>
+
+    <string name="settings_order_by_relevance_news_label">Relevance</string>
+    <string name="settings_order_by_relevance_news_value" translatable="false">relevance</string>
+
     //Choose section
     <string-array name="settings_choose_section_labels">
         <item>@string/settings_section_all_sections_news_label</item>
@@ -61,5 +87,7 @@
     <string name="setting_older_date">Wrong input - no data for today</string>
     <string name="setting_future_date">Wrong input - future date.</string>
     <string name="news">News</string>
+    <string name="default_date">1970-01-01</string>
+    <string name="from_before_to_warning">From date has to be before To date!</string>
 
 </resources>

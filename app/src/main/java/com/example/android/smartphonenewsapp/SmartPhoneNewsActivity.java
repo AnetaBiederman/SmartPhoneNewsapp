@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,6 +101,8 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
 
         String section = sharedPreferences.getString(getString(R.string.settings_choose_section_key), getString(R.string.settings_choose_section_default));
 
+        String orderBy = sharedPreferences.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+
         longFromDate = Long.parseLong(sharedPreferences.getString(
                 getString(R.string.settings_news_from_key), "0"));
         longToDate = Long.parseLong(sharedPreferences.getString(
@@ -125,15 +128,23 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
         uriBuilder.appendQueryParameter("show-tags", "contributor");
         uriBuilder.appendQueryParameter("show-fields", "thumbnail");
         uriBuilder.appendQueryParameter("page-size", "50");
-        uriBuilder.appendQueryParameter("from-date", newsFrom);
-        uriBuilder.appendQueryParameter("to-date", newsTo);
         uriBuilder.appendQueryParameter("q", "smartphone");
         uriBuilder.appendQueryParameter("api-key", "4f6d3d44-39b3-406a-95de-feb62fb2fd09");
+        uriBuilder.appendQueryParameter("order-by", orderBy);
 
+        if (!newsFrom.equals(getString(R.string.default_date))) {
+            uriBuilder.appendQueryParameter("from-date", newsFrom);
+        }
+        if (!newsTo.equals(getString(R.string.default_date))) {
+            uriBuilder.appendQueryParameter("to-date", newsTo);
+        }
         if (!section.equals(getString(R.string.settings_choose_section_default))) {
             uriBuilder.appendQueryParameter("section", section);
         }
+        if (longFromDate > longToDate){
+            Toast.makeText(getBaseContext(), R.string.from_before_to_warning, Toast.LENGTH_LONG).show();
 
+        }
         // Return the completed uri 'https://content.guardianapis.com/search?show-tags=contributor&show-fields=thumbnail&page-size=50&q=smartphone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09'.
         return new NewsLoader(this, uriBuilder.toString());
     }

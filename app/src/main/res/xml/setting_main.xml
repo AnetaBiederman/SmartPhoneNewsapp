@@ -13,6 +13,13 @@
         android:title="@string/settings_news_to_label" />
 
     <ListPreference
+        android:defaultValue="@string/settings_order_by_default"
+        android:entries="@array/settings_order_by_labels"
+        android:entryValues="@array/settings_order_by_values"
+        android:key="@string/settings_order_by_key"
+        android:title="@string/settings_order_by_label" />
+
+    <ListPreference
         android:defaultValue="@string/settings_choose_section_default"
         android:entries="@array/settings_choose_section_labels"
         android:entryValues="@array/settings_choose_section_values"

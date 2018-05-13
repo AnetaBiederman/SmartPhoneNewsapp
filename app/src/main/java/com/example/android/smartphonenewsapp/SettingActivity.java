@@ -35,8 +35,6 @@ public class SettingActivity extends AppCompatActivity {
         private int mCurrentMonth;
         private int mCurrentDayOfMonth;
         private String mToday;
-        private String mYesterday;
-        private String mMonthAgo;
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -49,6 +47,7 @@ public class SettingActivity extends AppCompatActivity {
             Preference section = findPreference(getString(R.string.settings_choose_section_key));
             bindPreferenceSummaryToValue(section);
 
+Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
 
             Preference fromDatePref = findPreference(getString(R.string.settings_news_from_key));
             Preference toDatePref = findPreference(getString(R.string.settings_news_to_key));
@@ -59,39 +58,6 @@ public class SettingActivity extends AppCompatActivity {
             mCurrentMonth = mCalendar.get(Calendar.MONTH);
             mCurrentDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
             mToday = dateFormat.format(mCalendar.getTime());
-
-            // Get Yesterday's date
-            mCalendar.add(Calendar.DATE, -1);
-            mYesterday = dateFormat.format(mCalendar.getTime());
-
-            // Get -30 days ago date
-            mCalendar.add(Calendar.DATE, -30);
-            mMonthAgo = dateFormat.format(mCalendar.getTime());
-
-            // Always set default From date to 30 days date when app is launched
-            if (preferences.getString(getString(R.string.settings_news_from_key), "0")
-                    .equalsIgnoreCase("0")) {
-                fromDatePref.setSummary(mMonthAgo);
-            } else {
-                String longPrefDate = preferences.getString(
-                        getString(R.string.settings_news_from_key), "0");
-                Date dateObject = new Date(Long.parseLong(longPrefDate));
-                Calendar calendarFrom = Calendar.getInstance();
-                calendarFrom.setTime(dateObject);
-                fromDatePref.setSummary(dateFormat.format(calendarFrom.getTime()));
-            }
-            // Always set default To date to Yesterday's date when app is launched
-            if (preferences.getString(getString(R.string.settings_news_to_key), "0")
-                    .equalsIgnoreCase("0")) {
-                toDatePref.setSummary(mYesterday);
-            } else {
-                String longPrefDate = preferences.getString(
-                        getString(R.string.settings_news_to_key), "0");
-                Date dateObject = new Date(Long.parseLong(longPrefDate));
-                Calendar calendarTo = Calendar.getInstance();
-                calendarTo.setTime(dateObject);
-                toDatePref.setSummary(dateFormat.format(calendarTo.getTime()));
-            }
 
 
             /** Set date picked from calendar as preferred date from*/

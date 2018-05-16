@@ -48,9 +48,9 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_phone_news);
 
-        ListView newsListView = (ListView) findViewById(R.id.list);
+        ListView newsListView = findViewById(R.id.list);
 
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_state_view);
+        mEmptyStateTextView = findViewById(R.id.empty_state_view);
         newsListView.setEmptyView(mEmptyStateTextView);
 
         mAdapter = new NewsAdapter(this, new ArrayList<ItemNews>());

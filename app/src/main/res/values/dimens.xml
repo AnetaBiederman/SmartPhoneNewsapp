@@ -4,4 +4,5 @@
     <dimen name="padding">16dp</dimen>
     <dimen name="margin_image">8dp</dimen>
     <dimen name="image_size">80dp</dimen>
+    <dimen name="fourty_dp">40dp</dimen>
 </resources>

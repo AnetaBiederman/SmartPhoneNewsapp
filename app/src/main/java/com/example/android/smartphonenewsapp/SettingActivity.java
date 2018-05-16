@@ -47,10 +47,14 @@ public class SettingActivity extends AppCompatActivity {
             Preference section = findPreference(getString(R.string.settings_choose_section_key));
             bindPreferenceSummaryToValue(section);
 
-Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            bindPreferenceSummaryToValue(orderBy);
 
             Preference fromDatePref = findPreference(getString(R.string.settings_news_from_key));
+            bindPreferenceSummaryToValue(fromDatePref);
+
             Preference toDatePref = findPreference(getString(R.string.settings_news_to_key));
+            bindPreferenceSummaryToValue(toDatePref);
 
             // Get today's Date
             mCalendar = Calendar.getInstance();
@@ -58,6 +62,32 @@ Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             mCurrentMonth = mCalendar.get(Calendar.MONTH);
             mCurrentDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
             mToday = dateFormat.format(mCalendar.getTime());
+
+            // Always set default From date to today's date when app is launched
+            if (preferences.getString(getString(R.string.settings_news_from_key), "0")
+                    .equalsIgnoreCase("0")) {
+                fromDatePref.setSummary(mToday);
+            } else {
+                String longPrefDate = preferences.getString(
+                        getString(R.string.settings_news_from_key), "0");
+                Date dateObject = new Date(Long.parseLong(longPrefDate));
+                Calendar calendarFrom = Calendar.getInstance();
+                calendarFrom.setTime(dateObject);
+                fromDatePref.setSummary(dateFormat.format(calendarFrom.getTime()));
+            }
+            // Always set default To date to Today's date when app is launched
+            if (preferences.getString(getString(R.string.settings_news_to_key), "0")
+                    .equalsIgnoreCase("0")) {
+                toDatePref.setSummary(mToday);
+            } else {
+                String longPrefDate = preferences.getString(
+                        getString(R.string.settings_news_to_key), "0");
+                Date dateObject = new Date(Long.parseLong(longPrefDate));
+                Calendar calendarTo = Calendar.getInstance();
+                calendarTo.setTime(dateObject);
+                toDatePref.setSummary(dateFormat.format(calendarTo.getTime()));
+            }
+
 
 
             /** Set date picked from calendar as preferred date from*/
@@ -135,6 +165,7 @@ Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+            preference.setSummary(stringValue);
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 int prefIndex = listPreference.findIndexOfValue(stringValue);

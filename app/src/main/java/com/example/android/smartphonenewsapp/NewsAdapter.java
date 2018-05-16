@@ -45,7 +45,7 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         String newsAuthor = currentNews.getAuthor();
 
         // Find the TextView with view ID title
-        TextView titleTextView = (TextView) listItemView.findViewById(R.id.title_text_view);
+        TextView titleTextView = listItemView.findViewById(R.id.title_text_view);
         titleTextView.setText(newsTitle);
         // Fetch the text color from the TextView.
         titleTextView.getTextColors();
@@ -55,19 +55,19 @@ public class NewsAdapter extends ArrayAdapter<ItemNews> {
         titleTextView.setTextColor(colorOfText);
 
         // Find the TextView with view ID date
-        TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
+        TextView dateTextView = listItemView.findViewById(R.id.date);
         dateTextView.setText(newsDate);
 
         // Find the TextView with view ID article_section
-        TextView sectionTextView = (TextView) listItemView.findViewById(R.id.article_section);
+        TextView sectionTextView = listItemView.findViewById(R.id.article_section);
         sectionTextView.setText(newsSection);
 
         // Find the TextView with view ID date
-        TextView pillarTextView = (TextView) listItemView.findViewById(R.id.article_pillar);
+        TextView pillarTextView = listItemView.findViewById(R.id.article_pillar);
         pillarTextView.setText(newsPillar);
 
         // Find the TextView with view ID author
-        TextView authorTextView = (TextView) listItemView.findViewById(R.id.author);
+        TextView authorTextView = listItemView.findViewById(R.id.author);
         authorTextView.setText(newsAuthor);
 
         // Return the list item view that is now showing the appropriate data

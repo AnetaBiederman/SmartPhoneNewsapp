@@ -129,7 +129,6 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
         uriBuilder.appendQueryParameter("show-fields", "thumbnail");
         uriBuilder.appendQueryParameter("page-size", "50");
         uriBuilder.appendQueryParameter("q", "smartphone");
-        uriBuilder.appendQueryParameter("api-key", "4f6d3d44-39b3-406a-95de-feb62fb2fd09");
         uriBuilder.appendQueryParameter("order-by", orderBy);
 
         if (!newsFrom.equals(getString(R.string.default_date))) {
@@ -145,7 +144,7 @@ public class SmartPhoneNewsActivity extends AppCompatActivity
             Toast.makeText(getBaseContext(), R.string.from_before_to_warning, Toast.LENGTH_LONG).show();
 
         }
-        // Return the completed uri 'https://content.guardianapis.com/search?show-tags=contributor&show-fields=thumbnail&page-size=50&q=smartphone&api-key=4f6d3d44-39b3-406a-95de-feb62fb2fd09'.
+        // Return the completed uri 'https://content.guardianapis.com/search?show-tags=contributor&show-fields=thumbnail&page-size=50&q=smartphone'.
         return new NewsLoader(this, uriBuilder.toString());
     }
 
